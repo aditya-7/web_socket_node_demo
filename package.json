@@ -1,0 +1,10 @@
+{
+  "name": "websocket_demo",
+  "version": "0.0.1",
+  "description": "demonstration of web socket communication",
+  "author" : "aditya kishore",
+  "dependencies" : {
+    "socket.io" : "*",
+    "fs" : "*"
+    }
+}

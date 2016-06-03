@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+    <style type="text/css">
+     .on  { background:green; }
+     .off { background:gray; }
+    </style>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	  <script src ="http://192.168.1.110:3000/socket.io/socket.io.js"></script>
+    <script language="javascript">
+      var socket;
+      var deviceStatus = 'OFFLINE';
+      onload = function(){
+        socket = io.connect('ws://192.168.1.110:3000');
+      };
+      function toggleState(item){
+        if(item.className == "on") {
+           item.className="off";
+           $('#btn').val("OFFLINE");
+           deviceStatus = 'OFFLINE';
+        } else {
+           item.className="on";
+           $('#btn').val("ONLINE");
+           deviceStatus = 'ONLINE';
+        }
+        socket.emit('DEVICE_STATUS', deviceStatus);
+      };
+
+      function setDeviceId(){
+        var deviceId = $('#deviceId').val();
+        console.log("deviceId set",deviceId)
+        socket.emit('SET_DEVICE_ID', deviceId);
+        setInterval(function(){
+          socket.emit('PING',deviceId)
+        },500);
+      }
+
+    </script>
+
+  </head>
+
+  <body>
+
+    <h2>Web Socket Demo</h2>
+    Set DeviceId : <input type="text" id="deviceId" /><input type="button"  value="SET" onclick="setDeviceId()" />
+    <br/><br/>
+    Device status : <input type="button" id="btn" value="OFFLINE" class="off" onclick="toggleState(this)" />
+  </body>
+
+</html>
